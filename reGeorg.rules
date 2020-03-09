@@ -1,0 +1,1 @@
+alert tcp any $HTTP_PORTS -> any any (msg:"Detect reGeorg"; dsize<240; flow:to_client,established; content:"|0d 0a|Georg says|2c 20 27|All seems fine|27|"; sid:1; rev:1; metadata:checked;)
