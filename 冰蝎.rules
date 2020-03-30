@@ -1,0 +1,4 @@
+alert http any any -> any any (msg:"Bingxie Webshell detect"; flow:established,to_client; pcre:"/\r\n\r\n[a-zA-Z0-9]{16,17}$/"; content:"200"; nocase; flowbits: set, first_get_resp; noalert; sid:1; rev:1;)
+alert http any any -> any any (msg:"Bingxie Webshell detect"; flow:established,to_server; content:"GET"; http_method; pcre:"/\.(php|asp|jsp|jspx|aspx)\?\w{1,8}=\d{1,10} HTTP/1\.1/"; flowbits: isset, first_get_resp; flowbits: set, second_get_req; noalert; sid:2; rev:1;)
+alert http any any -> any any (msg:"Bingxie Webshell detect"; flow:established,to_client; pcre:"/\r\n\r\n[a-zA-Z0-9]{16,17}$/"; nocase; flowbits:isset,second_get_req; flowbits:set,second_get_resp; noalert; sid:3; rev:1;)
+alert http any any -> any any (msg:"Bingxie Webshell detect"; flow:established,to_server; content:"POST"; http_method; pcre:"/\.(php|jsp|asp|jspx|aspx) HTTP/1\.1/"; flowbits:isset, second_get_resp; sid:4; rev:1;)
